@@ -19,13 +19,17 @@ public class WordDictionary {
 
 	// TreeSet used because it prevents duplicates and automatically sorts words
 	TreeSet<String> validWords;
-	private final File TXTFOLDER = new File ("./txt"); 
-	private final File DICTIONARY = new File ("./dict/dictionary.txt");
-	private final String SOURCEERROR = "SOURCE FILES NOT FOUND";
-	private final String DICTIONARYERROR = "FAILED TO CACHE DICTIONARY";
+	private final File TXTFOLDER, DICTIONARY;
+	private final String SOURCEERROR, DICTIONARYERROR;
 
 	public WordDictionary() throws Exception{
 		validWords = new TreeSet<String>();
+		
+		TXTFOLDER = new File ("./txt");
+		DICTIONARY = new File ("./dict/dictionary.txt");
+		
+		SOURCEERROR = "SOURCE FILES NOT FOUND";
+		DICTIONARYERROR = "FAILED TO CACHE DICTIONARY";
 	}
 
 	// Method that validates and loads the cache if a Dictionary already exist. Or creates a dictionary cache from the source files
@@ -65,7 +69,7 @@ public class WordDictionary {
 	}
 	
 	// Method that reads a Dictionary file and adds all words to a cache
-	public void loadDictionary(){
+	private void loadDictionary(){
 		String fileContents = "";
 		try {
 			fileContents = FileUtils.readFileToString(getDICTIONARY());

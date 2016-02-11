@@ -32,7 +32,7 @@ public class WordDictionaryTest {
 		// Create a new WordDictionary
 		WordDictionary w = new WordDictionary();
 //		assertTrue(w.getValidWords().isEmpty());  // ValidWords Should be empty
-		w.loadDictionary();
+//		w.loadDictionary();
 //		assertFalse(w.getValidWords().isEmpty()); // Check if loadDictionary filled ValidWords
 	}
 
