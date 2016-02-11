@@ -41,7 +41,7 @@ public class WordDictionaryTest {
 	public void testCheckWord() throws Exception {
 		// Create a new WordDictionary
 		WordDictionary w = new WordDictionary();
-		w.init();
+		w.initalize();
 		w.getValidWords().clear(); // Clear the ValidWords
 		w.getValidWords().add("ace"); // Add ace to the ValidWords
 		assertTrue(w.checkWord("ace")); // ace is in the ValidWords
