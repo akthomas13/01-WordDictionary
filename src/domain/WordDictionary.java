@@ -17,7 +17,8 @@ import org.apache.commons.io.FileUtils;
 
 public class WordDictionary {
 
-	TreeSet<String> validWords; // TreeSet used because it prevents duplicates and automatically sorts words
+	// TreeSet used because it prevents duplicates and automatically sorts words
+	TreeSet<String> validWords;
 	private final File TXTFOLDER = new File ("./txt"); 
 	private final File DICTIONARY = new File ("./dict/dictionary.txt");
 	private final String SOURCEERROR = "SOURCE FILES NOT FOUND";
@@ -26,13 +27,9 @@ public class WordDictionary {
 	public WordDictionary() throws Exception{
 		validWords = new TreeSet<String>();
 	}
-	// Init method that creates the WordDictionary by loading the Cache
-	public void init(){
-		loadCache();
-	}
 
 	// Method that validates and loads the cache if a Dictionary already exist. Or creates a dictionary cache from the source files
-	public void loadCache(){
+	public void initialize(){
 		if(getDICTIONARY().exists()){
 			System.out.println("Cached dictionary found! Validating Cache...");
 			validateCache();
@@ -112,7 +109,7 @@ public class WordDictionary {
 	}
 	
 	// Method that writes to a .txt file all the words currently in the cache. The total number of words is printed on the first line
-	public void createDictionary(){
+	private void createDictionary(){
 		System.out.println("Caching dictionary...");
 		PrintStream printer;
 		try {
@@ -128,7 +125,7 @@ public class WordDictionary {
 		System.out.println("Dictionary cached!");
 	}
 	// Method to check if the word passed in is currently in the cache
-	public boolean checkWord(String word){
+	private boolean checkWord(String word){
 		word = word.trim();
 		word = word.toLowerCase();
 		return validWords.contains(word);
@@ -147,10 +144,5 @@ public class WordDictionary {
 	// DICTIONARY getter method
 	public File getDICTIONARY() {
 		return DICTIONARY;
-	}
-	
-	// ValidWords getter method
-	public TreeSet<String> getValidWords(){
-		return validWords;
 	}
 }
