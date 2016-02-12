@@ -20,7 +20,9 @@ public class WordDictionaryTest {
 	public void testReadFiles() throws Exception {
 		// Create a new WordDictionary
 		WordDictionary w = new WordDictionary();
+		assertTrue("dictionary is not a valid file", w.getDICTIONARY().isFile());
 //		assertTrue(w.getValidWords().isEmpty());  // ValidWords Should be empty
+		System.out.println("deleting dictionary...");
 		w.getDICTIONARY().delete(); // Delete dictionary to ensure readFiles gets called
 		assertFalse(w.getDICTIONARY().exists()); // Check if dictionary was deleted
 		w.initialize();
