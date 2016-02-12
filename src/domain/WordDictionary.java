@@ -48,7 +48,9 @@ public class WordDictionary {
 		}
 	}
 
-	//Method used to determine if the dictionary cache is out of date. If it is out of date it will be updated
+	/**
+	 * Method used to determine if the dictionary cache is out of date. If it is out of date it will be updated
+	 */
 	private void validateCache() {
 		boolean changed = false;
 		for (File file : TXTFOLDER.listFiles()) {
