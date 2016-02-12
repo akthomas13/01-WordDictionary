@@ -89,7 +89,9 @@ public class WordDictionary {
 		System.out.println("Loaded " +validWords.size() + " valid words");
 	}
 	
-	// Method that reads .txt files for unique words with more than one letter and no numbers. These unique words are saved to a TreeSet
+	/**
+	 * Method that reads .txt files for unique words with more than one letter and no numbers. These unique words are saved to a TreeSet
+	 */
 	private void readFiles(){
 		String fileContents = "";
 		int numberOfFiles = 0;
