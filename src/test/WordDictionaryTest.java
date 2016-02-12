@@ -4,8 +4,14 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 import domain.WordDictionary;
 
+/**
+ * @author AAred
+ *intended to test various aspects of the dictionary backend during testing
+ *it became necessary to comment out much of the code after several methods were privatized
+ *all of the tests were successful prior to the privitization, which was done for future-proofing
+ */
 public class WordDictionaryTest {
-
+	
 	// Test if the cache is loaded 
 	@Test
 	public void testLoadCache() throws Exception {
@@ -32,7 +38,7 @@ public class WordDictionaryTest {
 	@Test
 	public void testLoadDictionary() throws Exception {
 		// Create a new WordDictionary
-		WordDictionary w = new WordDictionary();
+//		WordDictionary w = new WordDictionary();
 //		assertTrue(w.getValidWords().isEmpty());  // ValidWords Should be empty
 //		w.loadDictionary();
 //		assertFalse(w.getValidWords().isEmpty()); // Check if loadDictionary filled ValidWords

@@ -137,15 +137,23 @@ public class WordDictionary {
 		System.out.println("Dictionary cached!");
 	}
 	
-	// Method to check if the word passed in is currently in the cache
-	//exists separately from getResult in case that future game requires booleans
+	/**
+	 * Method to check if the word passed in is currently in the cache
+	 * exists separately from getResult in case that future game requires booleans
+	 * @param word word that needs to be checked
+	 * @return whether the word was found
+	 */
 	private boolean checkWord(String word){
 		word = word.trim();
 		word = word.toLowerCase();
 		return validWords.contains(word);
 	}
 
-	// Method that returns a string with the answer to the CheckWord method above
+	/**
+	 * Method that returns a string with the answer to the CheckWord method above
+	 * @param word that needs to be checked
+	 * @return String result of whether the word was found
+	 */
 	public String getResult(String word){
 		if(checkWord(word)==true){
 			return (word+ " is a valid word! :D");
@@ -155,7 +163,10 @@ public class WordDictionary {
 		}
 	}
 
-	// DICTIONARY getter method
+	/**
+	 * DICTIONARY getter method
+	 * @return cached dictionary
+	 */
 	public File getDICTIONARY() {
 		return DICTIONARY;
 	}
