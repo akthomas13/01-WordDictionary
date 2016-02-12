@@ -17,8 +17,7 @@ import org.apache.commons.io.FileUtils;
 
 public class WordDictionary {
 
-	// TreeSet used because it prevents duplicates and automatically sorts words
-	TreeSet<String> validWords;
+	TreeSet<String> validWords;	//TreeSet prevents duplicates and automatically sorts words
 	private final File TXTFOLDER, DICTIONARY;
 	private final String SOURCEERROR, DICTIONARYERROR;
 
