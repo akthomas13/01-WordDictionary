@@ -117,8 +117,10 @@ public class WordDictionary {
 		System.out.println("Found " +numberOfFiles+ " source files. "
 				+"Detected " +validWords.size() + " valid words out of " +totalWords+ " total words");
 	}
-	
-	// Method that writes to a .txt file all the words currently in the cache. The total number of words is printed on the first line
+	 
+	/**
+	 * Method that writes to a .txt file all the words currently in the cache. The total number of words is printed on the first line
+	 */
 	private void createDictionary(){
 		System.out.println("Caching dictionary...");
 		PrintStream printer;
