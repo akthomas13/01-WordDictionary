@@ -12,7 +12,7 @@ import org.apache.commons.io.FileUtils;
  * The Dictionary component of the game backend
  * Able to read dictionary files and compile their contents into one cache file
  * Is then able to read the cached file and use that as a source
- * @author AAred
+ * @author Aaron
  */
 
 public class WordDictionary {
