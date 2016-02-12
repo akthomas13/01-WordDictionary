@@ -71,7 +71,9 @@ public class WordDictionary {
 		}
 	}
 	
-	// Method that reads a Dictionary file and adds all words to a cache
+	/**
+	 * Method that reads a Dictionary file and adds all words to a cache
+	 */
 	private void loadDictionary(){
 		String fileContents = "";
 		try {
@@ -80,8 +82,11 @@ public class WordDictionary {
 			System.out.print(DICTIONARYERROR);
 		}
 		String[] allWords = fileContents.split("\\s+");
+		//delimits by any whitespace
 		for(String word : allWords){
 			if (!word.matches(".*\\d.*")){
+				//only adds words that do not contain a number
+				//used when loading the dictionary to avoid loading the number of entries
 				validWords.add(word);
 			}
 		}
@@ -105,9 +110,11 @@ public class WordDictionary {
 					System.out.println(SOURCEERROR);
 				}
 				String[] allWords = fileContents.split("\\s+");
+				//delimits by any whitespace
 				for(String word : allWords){
 					totalWords++;
 					if (!word.matches(".*\\d.*") && word.length()>1){
+						//only adds words that do not contain a number and length>1
 						validWords.add(word.toLowerCase());
 					}
 				}
