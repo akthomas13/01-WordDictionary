@@ -128,12 +128,14 @@ public class WordDictionary {
 		}
 		System.out.println("Dictionary cached!");
 	}
+	
 	// Method to check if the word passed in is currently in the cache
+	//exists separately from getResult in case that future game requires booleans
 	private boolean checkWord(String word){
 		word = word.trim();
 		word = word.toLowerCase();
 		return validWords.contains(word);
-	}//checks if a specified word exists within a dictionary file, throws an exception if it is not
+	}
 
 	// Method that returns a string with the answer to the CheckWord method above
 	public String getResult(String word){
