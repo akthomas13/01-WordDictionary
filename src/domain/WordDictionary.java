@@ -32,7 +32,9 @@ public class WordDictionary {
 		DICTIONARYERROR = "FAILED TO CACHE DICTIONARY";
 	}
 
-	// Method that validates and loads the cache if a Dictionary already exist. Or creates a dictionary cache from the source files
+	/**
+	 * Method that validates and loads the cache if a Dictionary already exist. Or creates a dictionary cache from the source files
+	 */
 	public void initialize(){
 		if(getDICTIONARY().exists()){
 			System.out.println("Cached dictionary found! Validating Cache...");
