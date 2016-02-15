@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.text.DecimalFormat;
 import java.util.TreeSet;
 import org.apache.commons.io.FileUtils;
 
@@ -12,6 +13,9 @@ import org.apache.commons.io.FileUtils;
  * The Dictionary component of the game backend
  * Able to read dictionary files and compile their contents into one cache file
  * Is then able to read the cached file and use that as a source
+ * v1. initial version, fully functional
+ * v2. code cleanup and refactoring of certain strings
+ * v3. implemented time calculation for each dictionary access method
  * @author Aaron Thomas
  */
 
@@ -51,6 +55,7 @@ public class WordDictionary {
 	 * Method used to determine if the dictionary cache is out of date. If it is out of date it will be updated
 	 */
 	private void validateCache() {
+		long start = System.nanoTime();
 		boolean changed = false;
 		for (File file : TXTFOLDER.listFiles()) {
 			if (file.isFile() && file.getName().endsWith(".txt")) {
@@ -69,12 +74,15 @@ public class WordDictionary {
 		else{
 			System.out.println("Cached dictionary is up to date");
 		}
+		long end = System.nanoTime();
+		System.out.println("time elapsed: " +time(start,end) + " seconds.\n");
 	}
 	
 	/**
 	 * Method that reads a Dictionary file and adds all words to a cache
 	 */
 	private void loadDictionary(){
+		long start = System.nanoTime();
 		String fileContents = "";
 		try {
 			fileContents = FileUtils.readFileToString(getDICTIONARY());
@@ -91,16 +99,18 @@ public class WordDictionary {
 			}
 		}
 		System.out.println("Loaded " +validWords.size() + " valid words");
+		long end = System.nanoTime();
+		System.out.println("time elapsed: " +time(start,end) + " seconds.\n");
 	}
 	
 	/**
 	 * Method that reads .txt files for unique words with more than one letter and no numbers. These unique words are saved to a TreeSet
 	 */
 	private void readFiles(){
+		long start = System.nanoTime();
 		String fileContents = "";
 		int numberOfFiles = 0;
 		int totalWords = 0;
-
 		for(File file : TXTFOLDER.listFiles()) {
 			numberOfFiles++;
 			if (file.isFile() && file.getName().endsWith(".txt")) {
@@ -122,12 +132,15 @@ public class WordDictionary {
 		}
 		System.out.println("Found " +numberOfFiles+ " source files. "
 				+"Detected " +validWords.size() + " valid words out of " +totalWords+ " total words");
+		long end = System.nanoTime();
+		System.out.println("time elapsed: " +time(start,end) + " seconds.\n");
 	}
 	 
 	/**
 	 * Method that writes to a .txt file all the words currently in the cache. The total number of words is printed on the first line
 	 */
 	private void createDictionary(){
+		long start = System.nanoTime();
 		System.out.println("Caching dictionary...");
 		PrintStream printer;
 		try {
@@ -141,6 +154,8 @@ public class WordDictionary {
 			System.out.println(DICTIONARYERROR);
 		}
 		System.out.println("Dictionary cached!");
+		long end = System.nanoTime();
+		System.out.println("time elapsed: " +time(start,end) + " seconds.\n");
 	}
 	
 	/**
@@ -161,14 +176,31 @@ public class WordDictionary {
 	 * @return String result of whether the word was found
 	 */
 	public String getResult(String word){
+		long start = System.nanoTime();
+		String result = "";
+		System.out.println("Checking validity of " +word+ "...");
 		if(checkWord(word)==true){
-			return (word+ " is a valid word! :D");
+			result = (word+ " is a valid word! :D");
 		}
 		else{
-			return (word+ " is invalid D:");
+			result = (word+ " is invalid D:");
 		}
+		long end = System.nanoTime();
+		System.out.println("time elapsed: " +time(start,end) + " seconds.\n");
+		return result;
 	}
 
+	/**
+	 * internal method used to format the display format of the time
+	 * @param start time of a method
+	 * @param end time of a method
+	 * @return formatted double
+	 */
+	private double time(long start, long end){
+		DecimalFormat df = new DecimalFormat("#.000");
+		return Double.parseDouble(df.format((double)(end-start) / 1000000000.0));
+	}
+	
 	/**
 	 * DICTIONARY getter method
 	 * @return cached dictionary
