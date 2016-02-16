@@ -14,8 +14,8 @@ import org.apache.commons.io.FileUtils;
  * Able to read dictionary files and compile their contents into one cache file
  * Is then able to read the cached file and use that as a source
  * v1. initial version, fully functional
- * v2. code cleanup and refactoring of certain strings
- * v3. implemented time calculation for each dictionary access method
+ * v2. implemented time calculation for each dictionary access method
+ * v3. refactored some methods, cleaned up console output
  * @author Aaron Thomas
  */
 public class WordDictionary {
@@ -40,12 +40,12 @@ public class WordDictionary {
 	 */
 	public void initialize(){
 		if(getDICTIONARY().exists()){
-			System.out.println("Cached dictionary found! Validating Cache...");
+			System.out.println("Cached dictionary found! Validating Cache...\n");
 			validateCache();
 			loadDictionary();
 		}
 		else{
-			System.out.println("Cached dictionary not found. Creating now from source files...");
+			System.out.println("Cached dictionary not found. Creating now from source files...\n");
 			readFiles();
 			createDictionary();
 		}
@@ -57,17 +57,7 @@ public class WordDictionary {
 	 */
 	private void validateCache() {
 		long start = System.nanoTime();
-		boolean changed = false;
-		for (File file : TXTFOLDER.listFiles()) {
-			if (file.isFile() && file.getName().endsWith(".txt")) {
-				long currentFileTime = file.lastModified();
-				long dictionaryTime = getDICTIONARY().lastModified();
-				if (currentFileTime > dictionaryTime) {
-					changed=true;
-				}
-			}
-		}
-		if (changed==true){
+		if (checkDeprecation()){
 			System.out.println("Cached dictionary out of date. Updating now from source files...");
 			readFiles();
 			createDictionary();
@@ -76,7 +66,24 @@ public class WordDictionary {
 			System.out.println("Cached dictionary is up to date");
 		}
 		long end = System.nanoTime();
-		System.out.println("time elapsed: " +time(start,end) + " seconds.\n");
+		System.out.println("Validation took " +time(start,end) + " seconds.\n");
+	}
+	
+	/**
+	 * internal method to check timestamps, stops if any file is changed
+	 * @return boolean of whether cache is out of date
+	 */
+	private boolean checkDeprecation(){
+		for (File file : TXTFOLDER.listFiles()) {
+			if (file.isFile() && file.getName().endsWith(".txt")) {
+				long currentFileTime = file.lastModified();
+				long dictionaryTime = getDICTIONARY().lastModified();
+				if (currentFileTime > dictionaryTime) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 	
 	/**
@@ -99,9 +106,9 @@ public class WordDictionary {
 				validWords.add(word);
 			}
 		}
-		System.out.println("Loaded " +validWords.size() + " valid words");
+		System.out.println("Dictionary contains " +validWords.size() + " valid words");
 		long end = System.nanoTime();
-		System.out.println("time elapsed: " +time(start,end) + " seconds.\n");
+		System.out.println("Loading took " +time(start,end) + " seconds.\n");
 	}
 	
 	/**
@@ -135,7 +142,7 @@ public class WordDictionary {
 		System.out.println("Found " +numberOfFiles+ " source files. "
 				+"Detected " +validWords.size() + " valid words out of " +totalWords+ " total words");
 		long end = System.nanoTime();
-		System.out.println("time elapsed: " +time(start,end) + " seconds.\n");
+		System.out.println("Reading files took " +time(start,end) + " seconds.\n");
 	}
 	 
 	/**
@@ -158,7 +165,7 @@ public class WordDictionary {
 		}
 		System.out.println("Dictionary cached!");
 		long end = System.nanoTime();
-		System.out.println("time elapsed: " +time(start,end) + " seconds.\n");
+		System.out.println("Creating dictionary took " +time(start,end) + " seconds.\n");
 	}
 	
 	/**
@@ -189,7 +196,7 @@ public class WordDictionary {
 			result = (word+ " is invalid D:");
 		}
 		long end = System.nanoTime();
-		System.out.println("time elapsed: " +time(start,end) + " seconds.\n");
+		System.out.println("Checking word took " +time(start,end) + " seconds.\n");
 		return result;
 	}
 
@@ -200,7 +207,7 @@ public class WordDictionary {
 	 * @return formatted double
 	 */
 	private double time(long start, long end){
-		DecimalFormat df = new DecimalFormat("#.000");
+		DecimalFormat df = new DecimalFormat("#.00000");
 		return Double.parseDouble(df.format((double)(end-start) / 1000000000.0));
 	}
 	
