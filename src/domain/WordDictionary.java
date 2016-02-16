@@ -66,7 +66,7 @@ public class WordDictionary {
 			System.out.println("Cached dictionary is up to date");
 		}
 		long end = System.nanoTime();
-		System.out.println("Validation took " +time(start,end) + " seconds.\n");
+		System.out.println("Validation took a total of " +time(start,end) + " seconds.\n");
 	}
 	
 	/**
