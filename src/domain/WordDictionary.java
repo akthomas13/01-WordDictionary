@@ -18,7 +18,6 @@ import org.apache.commons.io.FileUtils;
  * v3. implemented time calculation for each dictionary access method
  * @author Aaron Thomas
  */
-
 public class WordDictionary {
 
 	TreeSet<String> validWords;	//TreeSet prevents duplicates and automatically sorts words
@@ -36,7 +35,8 @@ public class WordDictionary {
 	}
 
 	/**
-	 * Method that validates and loads the cache if a Dictionary already exist. Or creates a dictionary cache from the source files
+	 * Method that validates and loads the cache if a Dictionary already exist.
+	 * Or creates a dictionary cache from the source files
 	 */
 	public void initialize(){
 		if(getDICTIONARY().exists()){
@@ -52,7 +52,8 @@ public class WordDictionary {
 	}
 
 	/**
-	 * Method used to determine if the dictionary cache is out of date. If it is out of date it will be updated
+	 * Method used to determine if the dictionary cache is out of date.
+	 * If it is out of date it will be updated
 	 */
 	private void validateCache() {
 		long start = System.nanoTime();
@@ -104,7 +105,8 @@ public class WordDictionary {
 	}
 	
 	/**
-	 * Method that reads .txt files for unique words with more than one letter and no numbers. These unique words are saved to a TreeSet
+	 * Method that reads .txt files for unique words with more than one letter and no numbers.
+	 * These unique words are saved to a TreeSet
 	 */
 	private void readFiles(){
 		long start = System.nanoTime();
@@ -137,7 +139,8 @@ public class WordDictionary {
 	}
 	 
 	/**
-	 * Method that writes to a .txt file all the words currently in the cache. The total number of words is printed on the first line
+	 * Method that writes to a .txt file all the words currently in the cache.
+	 * The total number of words is printed on the first line
 	 */
 	private void createDictionary(){
 		long start = System.nanoTime();
@@ -202,7 +205,7 @@ public class WordDictionary {
 	}
 	
 	/**
-	 * DICTIONARY getter method
+	 * DICTIONARY getter method, currently only used for JUnit Testing
 	 * @return cached dictionary
 	 */
 	public File getDICTIONARY() {
