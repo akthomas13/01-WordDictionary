@@ -5,9 +5,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.text.DecimalFormat;
 import java.util.TreeSet;
 import org.apache.commons.io.FileUtils;
+import com.google.common.base.Stopwatch;
 
 /**
  * The Dictionary component of the game backend
@@ -16,6 +16,7 @@ import org.apache.commons.io.FileUtils;
  * v1. initial version, fully functional
  * v2. implemented time calculation for each dictionary access method
  * v3. refactored some methods, cleaned up console output
+ * v4. used Google Guava API's Stopwatch for timing instead of System.nanoTime()
  * @author Aaron Thomas
  */
 public class WordDictionary {
@@ -24,7 +25,7 @@ public class WordDictionary {
 	private final File TXTFOLDER, DICTIONARY;
 	private final String SOURCEERROR, DICTIONARYERROR;
 
-	public WordDictionary() throws Exception{
+	public WordDictionary()throws Exception{
 		validWords = new TreeSet<String>();
 		
 		TXTFOLDER = new File ("./txt");
@@ -55,8 +56,8 @@ public class WordDictionary {
 	 * Method used to determine if the dictionary cache is out of date.
 	 * If it is out of date it will be updated
 	 */
-	private void validateCache() {
-		long start = System.nanoTime();
+	private void validateCache(){
+		Stopwatch timer = Stopwatch.createStarted();
 		if (checkDeprecation()){
 			System.out.println("Cached dictionary out of date. Updating now from source files...");
 			readFiles();
@@ -65,8 +66,7 @@ public class WordDictionary {
 		else{
 			System.out.println("Cached dictionary is up to date");
 		}
-		long end = System.nanoTime();
-		System.out.println("Validation took a total of " +time(start,end) + " seconds.\n");
+		System.out.println("Validation took a total of " +timer.stop()+ ".\n");
 	}
 	
 	/**
@@ -75,7 +75,7 @@ public class WordDictionary {
 	 */
 	private boolean checkDeprecation(){
 		for (File file : TXTFOLDER.listFiles()) {
-			if (file.isFile() && file.getName().endsWith(".txt")) {
+			if (file.isFile()&& file.getName().endsWith(".txt")) {
 				long currentFileTime = file.lastModified();
 				long dictionaryTime = getDICTIONARY().lastModified();
 				if (currentFileTime > dictionaryTime) {
@@ -90,7 +90,7 @@ public class WordDictionary {
 	 * Method that reads a Dictionary file and adds all words to a cache
 	 */
 	private void loadDictionary(){
-		long start = System.nanoTime();
+		Stopwatch timer = Stopwatch.createStarted();
 		String fileContents = "";
 		try {
 			fileContents = FileUtils.readFileToString(getDICTIONARY());
@@ -106,9 +106,8 @@ public class WordDictionary {
 				validWords.add(word);
 			}
 		}
-		System.out.println("Dictionary contains " +validWords.size() + " valid words");
-		long end = System.nanoTime();
-		System.out.println("Loading took " +time(start,end) + " seconds.\n");
+		System.out.println("Dictionary contains " +validWords.size()+ " valid words");
+		System.out.println("Loading took " +timer.stop()+ ".\n");
 	}
 	
 	/**
@@ -116,13 +115,13 @@ public class WordDictionary {
 	 * These unique words are saved to a TreeSet
 	 */
 	private void readFiles(){
-		long start = System.nanoTime();
+		Stopwatch timer = Stopwatch.createStarted();
 		String fileContents = "";
 		int numberOfFiles = 0;
 		int totalWords = 0;
 		for(File file : TXTFOLDER.listFiles()) {
 			numberOfFiles++;
-			if (file.isFile() && file.getName().endsWith(".txt")) {
+			if (file.isFile()&& file.getName().endsWith(".txt")) {
 				try {
 					fileContents = FileUtils.readFileToString(file);
 				} catch (IOException e) {
@@ -140,9 +139,8 @@ public class WordDictionary {
 			}
 		}
 		System.out.println("Found " +numberOfFiles+ " source files. "
-				+"Detected " +validWords.size() + " valid words out of " +totalWords+ " total words");
-		long end = System.nanoTime();
-		System.out.println("Reading files took " +time(start,end) + " seconds.\n");
+				+"Detected " +validWords.size()+ " valid words out of " +totalWords+ " total words");
+		System.out.println("Reading files took " +timer.stop()+ ".\n");
 	}
 	 
 	/**
@@ -150,7 +148,7 @@ public class WordDictionary {
 	 * The total number of words is printed on the first line
 	 */
 	private void createDictionary(){
-		long start = System.nanoTime();
+		Stopwatch timer = Stopwatch.createStarted();
 		System.out.println("Caching dictionary...");
 		PrintStream printer;
 		try {
@@ -164,8 +162,7 @@ public class WordDictionary {
 			System.out.println(DICTIONARYERROR);
 		}
 		System.out.println("Dictionary cached!");
-		long end = System.nanoTime();
-		System.out.println("Creating dictionary took " +time(start,end) + " seconds.\n");
+		System.out.println("Creating dictionary took " +timer.stop()+ ".\n");
 	}
 	
 	/**
@@ -186,7 +183,6 @@ public class WordDictionary {
 	 * @return String result of whether the word was found
 	 */
 	public String getResult(String word){
-		long start = System.nanoTime();
 		String result = "";
 		System.out.println("Checking validity of " +word+ "...");
 		if(checkWord(word)==true){
@@ -195,27 +191,14 @@ public class WordDictionary {
 		else{
 			result = (word+ " is invalid D:");
 		}
-		long end = System.nanoTime();
-		System.out.println("Checking word took " +time(start,end) + " seconds.\n");
 		return result;
 	}
 
 	/**
-	 * internal method used to format the display format of the time
-	 * @param start time of a method
-	 * @param end time of a method
-	 * @return formatted double
-	 */
-	private double time(long start, long end){
-		DecimalFormat df = new DecimalFormat("#.00000");
-		return Double.parseDouble(df.format((double)(end-start) / 1000000000.0));
-	}
-	
-	/**
 	 * DICTIONARY getter method, currently only used for JUnit Testing
 	 * @return cached dictionary
 	 */
-	public File getDICTIONARY() {
+	public File getDICTIONARY(){
 		return DICTIONARY;
 	}
 }
