@@ -1,10 +1,11 @@
 package domain;
 
+import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.text.DecimalFormat;
 import java.util.TreeSet;
 import org.apache.commons.io.FileUtils;
 import com.google.common.base.Stopwatch;
@@ -17,6 +18,7 @@ import com.google.common.base.Stopwatch;
  * v2. implemented time calculation for each dictionary access method
  * v3. refactored some methods, cleaned up console output
  * v4. used Google Guava API's Stopwatch for timing instead of System.nanoTime()
+ * v5. changed word counting to use suffixes
  * @author Aaron Thomas
  */
 public class WordDictionary {
@@ -106,7 +108,7 @@ public class WordDictionary {
 				validWords.add(word);
 			}
 		}
-		System.out.println("Dictionary contains " +validWords.size()+ " valid words");
+		System.out.println("Dictionary contains " +formatValue(validWords.size())+ " valid words");
 		System.out.println("Loading took " +timer.stop()+ ".\n");
 	}
 	
@@ -139,7 +141,7 @@ public class WordDictionary {
 			}
 		}
 		System.out.println("Found " +numberOfFiles+ " source files. "
-				+"Detected " +validWords.size()+ " valid words out of " +totalWords+ " total words");
+				+"Detected " +formatValue(validWords.size())+ " valid words out of " +formatValue(totalWords)+ " total words");
 		System.out.println("Reading files took " +timer.stop()+ ".\n");
 	}
 	 
@@ -150,16 +152,17 @@ public class WordDictionary {
 	private void createDictionary(){
 		Stopwatch timer = Stopwatch.createStarted();
 		System.out.println("Caching dictionary...");
-		PrintStream printer;
 		try {
-			printer = new PrintStream(new FileOutputStream(getDICTIONARY()));
-			printer.print(validWords.size());
-			for (String newWord : validWords){
-				printer.print("\n"+ newWord);
+			FileWriter fw = new FileWriter(this.DICTIONARY);
+			BufferedWriter bw = new BufferedWriter(fw);
+			PrintWriter pw = new PrintWriter (bw);
+			pw.println(validWords.size());
+			for (String word : validWords){
+				pw.println(word);
 			}
-			printer.close();
-		} catch (FileNotFoundException e) {
-			System.out.println(DICTIONARYERROR);
+			pw.close();
+		} catch (IOException e1) {
+			// System.out.println(DICTIONARYERROR);
 		}
 		System.out.println("Dictionary cached!");
 		System.out.println("Creating dictionary took " +timer.stop()+ ".\n");
@@ -192,6 +195,22 @@ public class WordDictionary {
 			result = (word+ " is invalid D:");
 		}
 		return result;
+	}
+	
+	/**
+	 * accepts a double value and returns it as a string formatted with a suffix
+	 * @param value to format with suffix
+	 * @return numStr formatted number
+	 * http://stackoverflow.com/questions/4753251/how-to-go-about-formatting-1200-to-1-2k-in-java
+	 */
+	private static String formatValue(double value) {
+		String[] suffix = {"","k", "m", "b", "t"};
+		String numStr = new DecimalFormat("##0E0").format(value);
+		numStr = numStr.replaceAll("E[0-9]", suffix[Character.getNumericValue(numStr.charAt(numStr.length() - 1)) / 3]);
+		while(numStr.length() > 4 || numStr.matches("[0-9]+\\.[a-z]")){
+			numStr = numStr.substring(0, numStr.length()-2) + numStr.substring(numStr.length() - 1);
+		}
+		return numStr;
 	}
 
 	/**
