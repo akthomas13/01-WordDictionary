@@ -19,6 +19,7 @@ import com.google.common.base.Stopwatch;
  * v3. refactored some methods, cleaned up console output
  * v4. used Google Guava API's Stopwatch for timing instead of System.nanoTime()
  * v5. changed word counting to use suffixes
+ * v6. removed all words with nonalphabetic characters
  * @author Aaron Thomas
  */
 public class WordDictionary {
@@ -102,7 +103,7 @@ public class WordDictionary {
 		String[] allWords = fileContents.split("\\s+");
 		//delimits by any whitespace
 		for(String word : allWords){
-			if (!word.matches(".*\\d.*")){
+			if (!word.matches("(^| )[^ ]*[^A-Za-z ][^ ]*(?=$| )")){
 				//only adds words that do not contain a number
 				//used when loading the dictionary to avoid loading the number of entries
 				validWords.add(word);
@@ -133,7 +134,7 @@ public class WordDictionary {
 				//delimits by any whitespace
 				for(String word : allWords){
 					totalWords++;
-					if (!word.matches(".*\\d.*") && word.length()>1){
+					if (!word.matches("(^| )[^ ]*[^A-Za-z ][^ ]*(?=$| )") && word.length()>1){
 						//only adds words that do not contain a number and length>1
 						validWords.add(word.toLowerCase());
 					}
